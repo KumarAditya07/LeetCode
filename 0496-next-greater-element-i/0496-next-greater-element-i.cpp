@@ -1,35 +1,37 @@
 class Solution {
-public:
-    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
-         map<int,int>m1; 
-    stack<int>st;
-     int n=nums2.size();
-    
-  for(int i=n-1;i>=0;i--){
-      
-      while(!st.empty() && st.top()<nums2[i]){
-          st.pop();
-      }
+  public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector < int >& nums2) {
+  stack < pair < int, int >> st;
+  vector<int> ans;
+         auto pair = -1;
+  unordered_map < int, int > mp;
 
-      if(st.empty()){
-          m1[nums2[i]]=-1;
-      }
-      
-      else{
-          m1[nums2[i]]=st.top();
-      }
-      
-      st.push(nums2[i]);
-
-      
+  for (int i = nums2.size() - 1; i >= 0; i--)
+  {
+    while (!st.empty() && st.top().first < nums2[i]) {
+      st.pop();
+    }
+    if (st.empty()) {
+      st.push({ nums2[i], -1 });
+      mp.insert(make_pair(st.top().first, -1));
+    }
+    else  {
+      pair = st.top().first;
+      st.push({ nums2[i], pair });
+      mp.insert(make_pair(st.top().first, st.top().second));
+    }
   }
-    vector<int>ans;
-    
-    for(auto i:nums1){
-        ans.push_back(m1[i]);
-    }
-    
-    
-    return ans;
-    }
-};
+
+
+  // for (auto i :mp) cout << i.first << "->" << i.second << endl;
+
+   for(auto i : nums1){
+       if(mp.find(i)!=mp.end()){
+            ans.push_back(mp[i]);
+       }
+   }
+
+   return ans;
+
+}
+  };
